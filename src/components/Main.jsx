@@ -6,7 +6,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onDeleteCli
 
     const [userName, setUserName] = React.useState('loading...');
     const [userDescription, setDescription] = React.useState('loading...');
-    const [userAvatar, setAvatar] = React.useState();
+    const [userAvatar, setAvatar] = React.useState('');
     const [cards, setCards] = React.useState([]);
 
     React.useEffect( () => {
@@ -35,16 +35,16 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onDeleteCli
 
             <section className="profile">
                 <div className="profile__description">
-                    <button className="profile__avatar" type="button" style={{ backgroundImage: `url(${userAvatar})` }} onClick={onEditAvatar}></button>
+                    <button className="profile__avatar" type="button" style={{ backgroundImage: `url(${userAvatar})` }} onClick={onEditAvatar} />
                     <div className="profile__text-cont">
                         <div className="profile__name-cont">
                             <h1 className="profile__name">{userName}</h1>
-                            <button className="profile__edit-button" type="button" onClick={onEditProfile}></button>    
+                            <button className="profile__edit-button" type="button" onClick={onEditProfile} />    
                         </div>
                         <p className="profile__about">{userDescription}</p>
                     </div>
                 </div>
-                <button className="profile__add-button" type="button" onClick={onAddPlace}></button>
+                <button className="profile__add-button" type="button" onClick={onAddPlace} />
             </section>
 
             <section className="gallery">

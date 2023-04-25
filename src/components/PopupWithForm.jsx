@@ -1,3 +1,5 @@
+import React from 'react';
+
 function PopupWithForm({name, title, nameOfSubmit, isOpen, children, closeAllPopups}) {
 
     function handleEscapePress(evt) {
@@ -12,13 +14,16 @@ function PopupWithForm({name, title, nameOfSubmit, isOpen, children, closeAllPop
         }
     }
 
-    document.addEventListener('keydown', handleEscapePress);
+    React.useEffect( () => {
+        if (isOpen) {document.addEventListener('keydown', handleEscapePress)}
+        return () => {document.removeEventListener('keydown', handleEscapePress)};
+    }, [isOpen])
 
-    return (
-        <div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`} onClick={handleSideClick}>
+    return isOpen && (
+        <div className="popup popup_type_${name} popup_opened" onClick={handleSideClick}>
             <div className="popup__containter">
                 <h2 className="popup__title">{title}</h2>
-                <button className="popup__close" type="button" onClick={closeAllPopups}></button>
+                <button className="popup__close" type="button" onClick={closeAllPopups} />
                 <form className="popup__form" name={`${name}-card-form`} noValidate>          
                     {children}
                     <button className="popup__button" type="submit">{nameOfSubmit}</button>
