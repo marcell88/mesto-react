@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '../components/Card.jsx';
 import api from '../utils/api.js';
 
-function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
+function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onDeleteClick}) {
 
     const [userName, setUserName] = React.useState('loading...');
     const [userDescription, setDescription] = React.useState('loading...');
@@ -48,7 +48,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
             </section>
 
             <section className="gallery">
-                {cards.map( item => (<Card card={item} onCardClick={onCardClick} key={item._id} />) )}
+                {cards.map( item => (<Card card={item} onDeleteClick={onDeleteClick} onCardClick={onCardClick} key={item._id} />) )}
             </section>
 
         </main>

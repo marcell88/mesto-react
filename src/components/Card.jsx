@@ -1,4 +1,4 @@
-function Card({card, onCardClick}) {
+function Card({card, onCardClick, onDeleteClick}) {
 
     function clickCard() {
         onCardClick(card);
@@ -14,7 +14,7 @@ function Card({card, onCardClick}) {
                     <p className="gallery__heart-likes">{card.likes.length}</p>
                 </div>
             </div>
-            <button className="gallery__delete" type="button"></button>
+            <button className="gallery__delete gallery__delete_displayed" type="button" onClick={onDeleteClick}></button>
         </div>   
     )
 
