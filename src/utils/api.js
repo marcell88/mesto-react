@@ -105,6 +105,11 @@ class Api {
         })
         .then( res => this._statusCheck(res, 'удаление лайка'));
     }
+
+    changeLikeCardStatus(cardId, status) {
+        return status ? this.addLikeToCard(cardId) : this.deleteLikeToCard(cardId);
+    }
+
 }
 
 const api = new Api({

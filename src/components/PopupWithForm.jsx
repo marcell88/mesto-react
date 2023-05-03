@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PopupWithForm({name, title, nameOfSubmit, isOpen, children, closeAllPopups}) {
+function PopupWithForm({isSubmitActive, name, title, nameOfSubmit, isOpen, children, closeAllPopups, onSubmit}) {
 
     function handleEscapePress(evt) {
         if (evt.key === 'Escape') {
@@ -23,10 +23,16 @@ function PopupWithForm({name, title, nameOfSubmit, isOpen, children, closeAllPop
         <div className="popup popup_type_${name} popup_opened" onClick={handleSideClick}>
             <div className="popup__containter">
                 <h2 className="popup__title">{title}</h2>
-                <button className="popup__close" type="button" onClick={closeAllPopups} />
-                <form className="popup__form" name={`${name}-card-form`} noValidate>          
+                <button className="popup__close" type="button" onClick={closeAllPopups} />                
+                <form className="popup__form" name={`${name}-card-form`} onSubmit={onSubmit} noValidate>          
                     {children}
-                    <button className="popup__button" type="submit">{nameOfSubmit}</button>
+                    <button 
+                        className={`popup__button ${isSubmitActive ? '' : 'popup__button_disabled'}`}
+                        disabled={!isSubmitActive} 
+                        type="submit"
+                    >
+                        {nameOfSubmit}
+                    </button>
                 </form>                  
             </div>
         </div>
