@@ -1,44 +1,31 @@
 import React from 'react';
 import Input from './Input';
 import PopupWithForm from './PopupWithForm';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
 function AddPlacePopup({titleButton, isOpen, onClose, onAddPic}) {
 
+    //Validation hook
+    const validation = useFormAndValidation();
+
     //States and effects
-    const [isInputPicNameValid, setInputPicNameValid] = React.useState(true);
-    const [inputPicNameErrorText, setPicInputNameErrorText] = React.useState('');
-    const inputPicNameRef = React.useRef();
-
-    const [isInputPicLinkValid, setInputPicLinkValid] = React.useState(true);
-    const [inputPicLinkErrorText, setInputPicLinkErrorText] = React.useState('');
-    const inputPicLinkRef = React.useRef();
-
-    const [isFormValid, setFormValid] = React.useState(false);
-
     const [picName, setPicName] = React.useState('');
     const [picLink, setPicLink] = React.useState('');
-
     React.useEffect( () => {
-        setInputPicNameValid(true);
-        setInputPicLinkValid(true);
-        setPicInputNameErrorText('');
-        setInputPicLinkErrorText('');
-        setFormValid(false);
+        setPicName('');
+        setPicLink('');
+        validation.resetForm(false);
     }, [isOpen]);
 
     //Callbacks
     const handlePicNameChange = (e) => {
         setPicName(e.target.value);
-        setInputPicNameValid(inputPicNameRef.current.validity.valid);
-        setPicInputNameErrorText(inputPicNameRef.current.validationMessage);
-        setFormValid(inputPicNameRef.current.validity.valid && inputPicLinkRef.current.validity.valid);
+        validation.handleChange(e);
     }
 
     const handlePicLinkChange = (e) => {
         setPicLink(e.target.value);
-        setInputPicLinkValid(inputPicLinkRef.current.validity.valid);
-        setInputPicLinkErrorText(inputPicLinkRef.current.validationMessage);
-        setFormValid(inputPicNameRef.current.validity.valid && inputPicLinkRef.current.validity.valid);
+        validation.handleChange(e);
     }
 
     const handleSubmit = (e) => {
@@ -47,14 +34,6 @@ function AddPlacePopup({titleButton, isOpen, onClose, onAddPic}) {
             name:picName,
             link:picLink,
         });
-        setPicName('');
-        setPicLink('');
-    }
-
-    const handleClose = () => {
-        onClose();
-        setPicName('');
-        setPicLink('');
     }
 
     return (
@@ -64,18 +43,17 @@ function AddPlacePopup({titleButton, isOpen, onClose, onAddPic}) {
             title="Новое место" 
             nameOfSubmit={titleButton} 
             isOpen={isOpen} 
-            closeAllPopups={handleClose} 
+            closeAllPopups={onClose} 
             onSubmit={handleSubmit}
-            isSubmitActive={isFormValid}
+            isSubmitActive={validation.isValid}
         >
 
             <Input 
                 inputModificator='popup__input_type_pic-name'
                 value={picName}
                 onChange={handlePicNameChange}
-                isError={!isInputPicNameValid}
-                errorText={inputPicNameErrorText}
-                inputRef={inputPicNameRef}
+                isError={!validation.isValid}
+                errorText={validation.errors['pic-name']}
                 type="text" 
                 name="pic-name" 
                 id="input-pic-name" 
@@ -89,9 +67,8 @@ function AddPlacePopup({titleButton, isOpen, onClose, onAddPic}) {
                 inputModificator='popup__input_type_pic-link'
                 value={picLink}
                 onChange={handlePicLinkChange}
-                isError={!isInputPicLinkValid}
-                errorText={inputPicLinkErrorText}
-                inputRef={inputPicLinkRef}
+                isError={!validation.isValid}
+                errorText={validation.errors['pic-link']}
                 type="url"  
                 name="pic-link" 
                 id="input-pic-link" 

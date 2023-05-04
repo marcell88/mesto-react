@@ -1,11 +1,10 @@
 import React from 'react';
 
-function Input({inputModificator, value, onChange, isError, errorText, inputRef, defaultValue, ...stdInputProps}) {
+function Input({inputModificator, value, onChange, isError, errorText, defaultValue, ...stdInputProps}) {
 
     return (
         <label className="popup__label">
             <input className={`popup__input ${inputModificator}`}
-                ref={inputRef}
                 value={value}
                 onChange={onChange}
                 defaultValue={defaultValue}

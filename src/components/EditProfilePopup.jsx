@@ -2,48 +2,34 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import Input from './Input';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
 
 function EditProfilePopup({titleButton, isOpen, onClose, onUpdateUser}) {
     
     //Context
     const currentUser = React.useContext(CurrentUserContext);
 
+    //Validation hook
+    const validation = useFormAndValidation();
+
     //States and effects
-    const [isInputNameValid, setInputNameValid] = React.useState(true);
-    const [inputNameErrorText, setInputNameErrorText] = React.useState('');
-    const inputNameRef = React.useRef();
-
-    const [isInputDescriptionValid, setInputDescriptionValid] = React.useState(true);
-    const [inputDescriptionErrorText, setInputDescriptionErrorText] = React.useState('');
-    const inputDescriptionRef = React.useRef();
-
-    const [isFormValid, setFormValid] = React.useState(true);
-
     const [name, setName] = React.useState('');
     const [description, setDescription] = React.useState('');
     React.useEffect( () => {
         setName(currentUser.name);
         setDescription(currentUser.about);
-        setInputNameValid(true);
-        setInputDescriptionValid(true);
-        setInputNameErrorText('');
-        setInputDescriptionErrorText('');
-        setFormValid(true);
+        validation.resetForm(true);
     }, [currentUser, isOpen]);
 
     //Callbacks
     const handleNameChange = (evt) => {
         setName(evt.target.value);
-        setInputNameValid(inputNameRef.current.validity.valid);
-        setInputNameErrorText(inputNameRef.current.validationMessage);
-        setFormValid(inputNameRef.current.validity.valid && inputDescriptionRef.current.validity.valid);
+        validation.handleChange(evt);
     }
 
     const handleAboutChange = (evt) => {
         setDescription(evt.target.value);
-        setInputDescriptionValid(inputDescriptionRef.current.validity.valid);
-        setInputDescriptionErrorText(inputDescriptionRef.current.validationMessage);
-        setFormValid(inputNameRef.current.validity.valid && inputDescriptionRef.current.validity.valid);
+        validation.handleChange(evt);
     }
 
     const handleSubmit = (e) => {
@@ -62,7 +48,7 @@ function EditProfilePopup({titleButton, isOpen, onClose, onUpdateUser}) {
             nameOfSubmit={titleButton}
             isOpen={isOpen} 
             closeAllPopups={onClose}
-            isSubmitActive={isFormValid}
+            isSubmitActive={validation.isValid}
             onSubmit={handleSubmit}
         >
             
@@ -70,9 +56,8 @@ function EditProfilePopup({titleButton, isOpen, onClose, onUpdateUser}) {
                 inputModificator='popup__input_type_name'
                 value={name}
                 onChange={handleNameChange}
-                isError={!isInputNameValid}
-                errorText={inputNameErrorText}
-                inputRef={inputNameRef}
+                isError={!validation.isValid}
+                errorText={validation.errors.name}
                 type="text" 
                 name="name" 
                 id="input-name" 
@@ -86,9 +71,8 @@ function EditProfilePopup({titleButton, isOpen, onClose, onUpdateUser}) {
                 inputModificator='popup__input_type_job'
                 value={description}
                 onChange={handleAboutChange}
-                isError={!isInputDescriptionValid}
-                errorText={inputDescriptionErrorText}
-                inputRef={inputDescriptionRef}
+                isError={!validation.isValid}
+                errorText={validation.errors.job}
                 type="text" 
                 name="job" 
                 id="input-job" 
